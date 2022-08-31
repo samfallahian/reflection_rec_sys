@@ -1,16 +1,18 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+from dataloader.datareader import DataReader
+from configs import config as cfg
+from utils.helpers import Config
+from executor.executor import Executor
 
 
-# Press the green button in the gutter to run the script.
+def run():
+    conf = Config.from_json(cfg.CFG)
+    data_reader = DataReader(conf)
+    data = data_reader.load_and_standardize_data()
+    executor = Executor(cfg=conf.train, data=data)
+
+    print(executor.get_top_k(challenge="time management", name="Bob"))
+
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    run()
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
