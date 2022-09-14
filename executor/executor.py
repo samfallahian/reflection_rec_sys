@@ -19,13 +19,13 @@ class Executor:
         for i in range(len(self.sentences_past)):
             new_df = new_df.append({'cos_score': cosine_scores[i][0],
                                     'challenge': self.sentences_past[i],
-                                    'solution': self.data.iloc[i][self.cfg.solution_prompt]}
+                                    'solution': self.data.iloc[i][self.cfg.solution_prompt],
+                                    'name' : self.data.iloc[i][self.cfg.feature_name]}
                                    , ignore_index=True)
 
-        written_by_self = self.data.index[self.data['name'] == name].tolist()
-
-        if len(written_by_self) > 0:
-            new_df.drop(index=written_by_self, inplace=True)
+        # Filter out any responses that this student has written themselves
+        # Why: We do not want to recommend solutions back to a student that they have written (that's useless)
+        new_df = new_df[new_df['name'] != name]
 
         return new_df.nlargest(k, ['cos_score'])
 
