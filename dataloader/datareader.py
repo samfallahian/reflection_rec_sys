@@ -9,7 +9,7 @@ class DataReader:
 
     def load_and_standardize_data(self):
         path = self.cfg.data.path
-        csv_files = glob.glob(os.path.join(f"{path}", "*.csv"))
+        csv_files = glob.glob(os.path.join(f"{path}/data", "*.csv"))
         data = []
         for csv in csv_files:
             frame = pd.read_csv(csv, encoding="cp1252", engine='python')  # "ISO-8859-1" , 'utf-8'
