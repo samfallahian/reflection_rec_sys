@@ -8,7 +8,7 @@ class Embedding:
         self.embeded_past = self.model.encode(self.sentences_past, convert_to_tensor=True)
 
     def do_embedding(self, input_text):
-        return self.model.encode(input_text, convert_to_tensor=True)
+        return self.model.encode(str(input_text), convert_to_tensor=True)
 
     def get_cosine_scores(self, challenge):
         embedded_challenge = self.do_embedding(challenge)
