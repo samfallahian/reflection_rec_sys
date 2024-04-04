@@ -1,4 +1,5 @@
 from model.embedding import Embedding
+from model.llm import LLM
 import pandas as pd
 from datetime import datetime
 
@@ -32,7 +33,8 @@ class Executor:
 
         return new_df.nlargest(k, ['cos_score'])
 
-    def get_results(self, input_file_name):
+    def get_results(self, input_file_name, k=5):
+        # Read in current students' data
         inputs = pd.read_csv(self.cfg.data.path+f"/inputs/{input_file_name}.csv", encoding="cp1252", engine='python')
 
         results = pd.DataFrame()
@@ -44,7 +46,8 @@ class Executor:
 
             student_info = pd.DataFrame.from_dict({'email': [row['Email Address']], 'name': row["Full Name"], 'reflection' : row["student's reflection"]})
 
-            top_k = self.get_top_k(challenge=row["student's reflection"], name=row["Full Name"]).reset_index()
+            # Get top K similar student results
+            top_k = self.get_top_k(challenge=row["student's reflection"], name=row["Full Name"], k=k).reset_index()
 
             temp = top_k.stack().to_frame().T
             #temp.columns = ['{}_{}'.format(*c) for c in temp.columns]
@@ -55,4 +58,11 @@ class Executor:
         #df = pd.concat(results, ignore_index=True)
         results.to_csv(self.cfg.data.path+f"/results/{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}_{input_file_name}.csv", index=False)
         
-        #pass
+        if self.cfg['model']['LLM'] == True:
+            # Initiate LLM object with the parameters needed
+            self.llm = LLM(model=self.cfg['model']['version'])
+
+            print("WE MADE IT HERE..")
+            # TODO. We have progress in a notebook file. next step would be to add it here
+
+        
