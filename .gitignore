@@ -134,3 +134,6 @@ data/*.csv
 
 results/*.csv
 inputs/*.csv
+
+# Ignore key
+*/openai_key*
