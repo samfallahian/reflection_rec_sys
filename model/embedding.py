@@ -27,7 +27,8 @@ class Embedding:
         else:
             print("Encoding sentences and saving embeddings")
             self.embeded_past = self.model.encode(self.sentences_past, convert_to_tensor=True)
-        
+            torch.save(self.embeded_past, self.embeddings_file)
+            
         print("Finished setup")
 
     def do_embedding(self, input_text):
