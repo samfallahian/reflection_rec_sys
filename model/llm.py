@@ -19,7 +19,7 @@ class LLM:
         self.temperature = temperature
         self.max_tokens = max_tokens
 
-    def general_prompt(self, prompt, data):
+    def generate_prompt(self, prompt, data):
 
         for _ in range(self.retries + 1):  # Include the initial attempt plus the specified retries
             try:
