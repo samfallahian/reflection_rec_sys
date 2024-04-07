@@ -114,11 +114,13 @@ class Executor:
                 talks about a challenge before using it in the email.
                 
                 Please write an email to the student that accomplishes the following tasks:
-                (1) Assures the student that they are not alone with their challenge, and provide a general summary of previous students' challenges.
-                (2) Identify the general topic the former students' reflections have in common, and identify how this topic relates
+                (1) First, summarize your understanding of the student's current challenge and validate their struggles.
+                (2) Assures the student that they are not alone with their challenge, and provide a general summary of previous students' challenges. 
+                (3) Identify the general topic the former students' reflections have in common, and identify how this topic relates
                 to the current student's challenge. Possible topics include: assignments, quizzes, lectures, quality of instructor, etc
-                (3) Provide a general summary of the previous students' solutions as well, and comment on the usefulness of the solutions.
-                (4) Provide your own solutions to the challenge based on your understanding of best practices in teaching.
+                (4) Provide a general summary of the previous students' solutions as well, and comment on the usefulness of the solutions.
+                (5) Provide your own solutions to the challenge based on your understanding of best practices in teaching.
+                (6) Please only include the email content (for example, no subject line, dear [name], or best regards)
                 
                 Students' Previous Challenges and Solutions:
                 {similar_challenges}
@@ -133,6 +135,6 @@ class Executor:
                 results.at[index, 'llm_output'] = llm_output
 
             # Save results again
-            results.to_csv(self.cfg.data.path+f"/results/with_llm_{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}_{input_file_name}.csv", index=False)
+            results.to_csv(self.cfg.data.path+f"/results/{self.cfg.model.version}_{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}_{input_file_name}.csv", index=False)
             
         
