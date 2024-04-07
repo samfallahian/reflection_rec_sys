@@ -21,7 +21,7 @@ class Embedding:
         self.embeddings_file = os.path.join(self.embeddings_folder, filename)
 
         # Load embeddings if they exist, otherwise encode and save
-        if os.path.exists(self.embebeddings_file):
+        if os.path.exists(self.embeddings_file):
             print("Loading saved embeddings")
             self.embeded_past = torch.load(self.embeddings_file)
         else:
