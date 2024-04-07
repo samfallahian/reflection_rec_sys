@@ -57,5 +57,5 @@ class LLM:
 
         if response and len(response.choices) > 0:
             prompt_response =  str(response['choices'][0]['message']['content'])
-            print(prompt_response )
+            #print(prompt_response )
             return (prompt_response)

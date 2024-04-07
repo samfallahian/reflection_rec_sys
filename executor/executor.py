@@ -71,10 +71,12 @@ class Executor:
             # Initiate LLM object with the parameters needed
             self.llm = LLM(cfg = self.cfg, model=self.cfg.model.version)
 
-            print("WE MADE IT HERE..")
+            # Reindex the dataframe before proceeding
+            results.reset_index(drop=True, inplace=True)
 
             # Iterate through each student in our results
             for index, student in results.iterrows():
+                print(f"Current student: {student}, current row: {index}")
                 current_challenge = student['reflection']
                 
                 # Initialize an empty list to hold the dictionaries
@@ -122,7 +124,15 @@ class Executor:
                 {similar_challenges}
                 '''
 
-                print(self.llm.generate_prompt(prompt, current_challenge))
-                break
+                # Generate LLM output
+                llm_output = self.llm.generate_prompt(prompt, current_challenge)
 
+                print(f"INDEX IS: {index}")
+                print(f"LLM OUTPUT IS: {llm_output}")
+                # Update the DataFrame with the LLM output for the current row
+                results.at[index, 'llm_output'] = llm_output
+
+            # Save results again
+            results.to_csv(self.cfg.data.path+f"/results/with_llm_{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}_{input_file_name}.csv", index=False)
+            
         
