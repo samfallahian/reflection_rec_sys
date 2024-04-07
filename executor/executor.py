@@ -8,7 +8,7 @@ class Executor:
         self.cfg = cfg
         self.data = data
         self.sentences_past = data[cfg.train.challenge_prompt].values
-        self.embedding = Embedding(sentences_past=self.sentences_past)
+        self.embedding = Embedding(sentences_past=self.sentences_past, cfg=self.cfg)
 
     def similarity(self, challenge):
         cosine_scores = self.embedding.get_cosine_scores(challenge=challenge)
@@ -67,9 +67,9 @@ class Executor:
         # -------------------------------------------------------------
         # If LLM is true, move on to the next block for generating text using chatgpt api based on student challenges and solutions.
         # Could possibly just add this into the iteration above but for now will just keep it thos way. Need to think about what is more efficient/preferable.
-        if self.cfg['model']['LLM'] == True:
+        if self.cfg.model.LLM == True:
             # Initiate LLM object with the parameters needed
-            self.llm = LLM(model=self.cfg['model']['version'])
+            self.llm = LLM(model=self.cfg.model.version)
 
             print("WE MADE IT HERE..")
 
