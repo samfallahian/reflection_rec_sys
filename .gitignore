@@ -131,6 +131,7 @@ dmypy.json
 .idea
 
 data/*.csv
+data/*
 
 results/*.csv
 inputs/*.csv
