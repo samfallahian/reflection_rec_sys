@@ -69,7 +69,7 @@ class Executor:
         # Could possibly just add this into the iteration above but for now will just keep it thos way. Need to think about what is more efficient/preferable.
         if self.cfg.model.LLM == True:
             # Initiate LLM object with the parameters needed
-            self.llm = LLM(model=self.cfg.model.version)
+            self.llm = LLM(cfg = self.cfg, model=self.cfg.model.version)
 
             print("WE MADE IT HERE..")
 

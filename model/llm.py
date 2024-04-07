@@ -3,7 +3,9 @@ import json
 import time
 
 class LLM:
-    def __init__(self, model="gpt-3.5-turbo", retries = 3, temperature = 0.7, max_tokens = 2000):
+    def __init__(self, cfg, model="gpt-3.5-turbo", retries = 3, temperature = 0.7, max_tokens = 2000):
+
+        self.cfg = cfg
         # model can be: "gpt-3.5-turbo", "gpt-4-0125-preview"
         self.potential_models = ["gpt-3.5-turbo", "gpt-4-0125-preview"]
         self.model = model
@@ -18,6 +20,11 @@ class LLM:
         self.retries = retries
         self.temperature = temperature
         self.max_tokens = max_tokens
+
+        # Load key file
+        with open(f"{self.cfg.data.path}/configs/{self.cfg.model.api_key_file}") as key_file:
+            key = json.load(key_file)
+        openai.api_key = key['api_key']
 
     def generate_prompt(self, prompt, data):
 

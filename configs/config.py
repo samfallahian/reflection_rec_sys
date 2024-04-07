@@ -10,6 +10,7 @@ CFG = {
     },
     "model": {
         "LLM": True,
-        "version": "gpt-3.5-turbo" # Possible versions: ["gpt-3.5-turbo", "gpt-4-0125-preview"]
+        "version": "gpt-3.5-turbo", # Possible versions: ["gpt-3.5-turbo", "gpt-4-0125-preview"]
+        "api_key_file": "openai_key.json" 
     }
 }
