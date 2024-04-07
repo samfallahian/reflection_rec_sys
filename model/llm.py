@@ -6,11 +6,11 @@ class LLM:
     def __init__(self, model="gpt-3.5-turbo", retries = 3, temperature = 0.7, max_tokens = 2000):
         # model can be: "gpt-3.5-turbo", "gpt-4-0125-preview"
         self.potential_models = ["gpt-3.5-turbo", "gpt-4-0125-preview"]
-        self.model == model
+        self.model = model
 
-        if self.model == self.models[0]:
+        if self.model == self.potential_models[0]:
             self.request_timeout = 10
-        elif self.model == self.models[1]:
+        elif self.model == self.potential_models[1]:
             self.request_timeout = 30
         else:
             self.request_timeout = 10
