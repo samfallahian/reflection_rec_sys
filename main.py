@@ -15,7 +15,7 @@ def run():
     executor = Executor(cfg=conf, data=data)
     print(f"Start training: {datetime.now()}")
 
-    executor.get_results(input_file_name=conf['data']['course_input'])
+    executor.get_results(input_file_name=conf.data.course_input)
     print(f"Finished: {datetime.now()}")
 
 
