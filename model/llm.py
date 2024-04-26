@@ -22,7 +22,7 @@ class LLM:
         self.max_tokens = max_tokens
 
         # Load key file
-        with open(f"{self.cfg.data.path}/configs/{self.cfg.model.api_key_file}") as key_file:
+        with open(f"{self.cfg['data']['path']}/configs/{self.cfg['model']['api_key_file']}") as key_file:
             key = json.load(key_file)
         openai.api_key = key['api_key']
 

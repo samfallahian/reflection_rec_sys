@@ -7,7 +7,7 @@ class Executor:
     def __init__(self, cfg, data):
         self.cfg = cfg
         self.data = data
-        self.sentences_past = data[cfg.train.challenge_prompt].values
+        self.sentences_past = data[cfg['train']['challenge_prompt']].values
         self.embedding = Embedding(sentences_past=self.sentences_past, cfg=self.cfg)
 
     def similarity(self, challenge):
@@ -21,8 +21,8 @@ class Executor:
         for i in range(len(self.sentences_past)):
             temp = {"cos_score": [cosine_scores[i][0]],
                         "challenge": [self.sentences_past[i]],
-                        "solution": [self.data.iloc[i][self.cfg.train.solution_prompt]],
-                        "name" : [self.data.iloc[i][self.cfg.train.feature_name]]}
+                        "solution": [self.data.iloc[i][self.cfg['train']['solution_prompt']]],
+                        "name" : [self.data.iloc[i][self.cfg['train']['feature_name']]]}
 
             new_df = pd.concat([new_df, pd.DataFrame.from_dict(temp)], ignore_index=True)
             new_df.reset_index()
@@ -35,7 +35,7 @@ class Executor:
 
     def get_results(self, input_file_name, k=5):
         # Read in current students' data
-        inputs = pd.read_csv(self.cfg.data.path+f"/inputs/{input_file_name}.csv", encoding="cp1252", engine='python')
+        inputs = pd.read_csv(self.cfg['data']['path']+f"/inputs/{input_file_name}.csv", encoding="cp1252", engine='python')
 
         results = pd.DataFrame()
         #results = pd.DataFrame(columns=['email', 'name', 'reflection', '0_cos_score', '0_challenge', '0_solution', '0_name', '1_cos_score', '1_challenge', '1_solution', '1_name', '2_cos_score', '2_challenge', '2_solution', '2_name', '3_cos_score', '3_challenge', '3_solution', '3_name', '4_cos_score', '4_challenge', '4_solution', '4_name'])
@@ -59,7 +59,7 @@ class Executor:
             results = pd.concat([results, pd.concat([student_info, temp], axis=1)])
 
         #df = pd.concat(results, ignore_index=True)
-        results.to_csv(self.cfg.data.path+f"/results/{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}_{input_file_name}.csv", index=False)
+        results.to_csv(self.cfg['data']['path']+f"/results/{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}_{input_file_name}.csv", index=False)
         
         # -------------------------------------------------------------
         # LLM Block - Use ChatGPT API with prompting to provide additional suggestions
@@ -67,13 +67,15 @@ class Executor:
         # -------------------------------------------------------------
         # If LLM is true, move on to the next block for generating text using chatgpt api based on student challenges and solutions.
         # Could possibly just add this into the iteration above but for now will just keep it thos way. Need to think about what is more efficient/preferable.
-        if self.cfg.model.LLM == True:
+        if self.cfg['model']['LLM'] == True:
             # Initiate LLM object with the parameters needed
-            self.llm = LLM(cfg = self.cfg, model=self.cfg.model.version)
+            self.llm = LLM(cfg = self.cfg, model=self.cfg['model']['version'])
 
             # Reindex the dataframe before proceeding
             results.reset_index(drop=True, inplace=True)
 
+            prompting_params = self.cfg['prompting']
+            
             # Iterate through each student in our results
             for index, student in results.iterrows():
                 print(f"Current student: {student}, current row: {index}")
@@ -103,26 +105,16 @@ class Executor:
                 # Adding triple quotes to mimic the exact output format as asked
                 similar_challenges = f"'''\n{similar_challenges}\n'''"
 
-                # Building the prompt based on the challenge-solution pairs. TODO: Make this a parameter or something
-                prompt = f''' You are an instructor who wants to help students with their challenges but also increase students' sense of belonging.
-                You are given a current students' reflection called Student Reflection. 
+                # Building the prompt based on the challenge-solution pairs.
+                prompt = f''' Your role is: {prompting_params['role']}
                 
-                The reflection prompts were 'What was your biggest challenge?' and 'What is a potential solution to your challenge?'
-                
-                You are also given former students' reflections. These reflections were automatically selected by our algorithm to have the most 
-                similar challenges to the student out of our dataset. However, the similarity may not be clear. Make sure the student actually
-                talks about a challenge before using it in the email.
-                
-                Please write an email to the student that accomplishes the following tasks:
-                (1) First, summarize your understanding of the student's current challenge and validate their struggles.
-                (2) Assures the student that they are not alone with their challenge, and provide a general summary of previous students' challenges. 
-                (3) Identify the general topic the former students' reflections have in common, and identify how this topic relates
-                to the current student's challenge. Possible topics include: assignments, quizzes, lectures, quality of instructor, etc
-                (4) Provide a general summary of the previous students' solutions as well, and comment on the usefulness of the solutions.
-                (5) Provide your own solutions to the challenge based on your understanding of best practices in teaching.
-                (6) Please only include the email content (for example, no subject line, dear [name], or best regards)
-                
-                Students' Previous Challenges and Solutions:
+                Your context is: {prompting_params['context']}
+
+                Your task is: {prompting_params['task']}
+
+                An example response I'd like to see is: {prompting_params['example']}
+
+                Here is a list of students' previous challenges and solutions:
                 {similar_challenges}
                 '''
 
@@ -135,6 +127,6 @@ class Executor:
                 results.at[index, 'llm_output'] = llm_output
 
             # Save results again
-            results.to_csv(self.cfg.data.path+f"/results/{self.cfg.model.version}_{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}_{input_file_name}.csv", index=False)
+            results.to_csv(self.cfg['data']['path']+f"/results/{self.cfg['model']['version']}_{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}_{input_file_name}.csv", index=False)
             
         

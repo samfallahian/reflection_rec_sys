@@ -11,15 +11,16 @@ class Embedding:
         self.cfg = cfg
 
         # Specify and make folder for storing embeddings if doesn't already exist
-        self.embeddings_folder = f"{self.cfg.data.path}/data/embeddings"
+        self.embeddings_folder = f"{self.cfg['data']['path']}/data/embeddings"
         os.makedirs(self.embeddings_folder, exist_ok=True)
         print(f"Embeddings folder is: {self.embeddings_folder}")
         # Specify file name for saved embeddings
-        filename = f"{self.cfg.data.course_input}.pt"
+        filename = f"{self.cfg['data']['course_input']}.pt"
         print(f"File name is now: {filename}")
         # Full path for the embeddings file
         self.embeddings_file = os.path.join(self.embeddings_folder, filename)
 
+        # TODO. Differentiate for when config.data.filter_class is True or False
         # Load embeddings if they exist, otherwise encode and save
         if os.path.exists(self.embeddings_file):
             print("Loading saved embeddings")
