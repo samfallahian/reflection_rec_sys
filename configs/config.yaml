@@ -1,0 +1,40 @@
+data:
+  path: "D:/Projects/reflection_rec_sys"
+  course_input: "3162"
+  filter_class: True # ONLY use this class's data
+train:
+  challenge_prompt: "challenge"
+  solution_prompt: "solution"
+  feature_name: "name"
+model:
+  LLM: true
+  version: "gpt-4-0125-preview"  # Possible versions: ["gpt-3.5-turbo", "gpt-4-0125-preview"]
+  api_key_file: "openai_key.json"
+prompting:
+  role: "You are an instructor assistant of an introduction to data mining course. You want to help students with their challenges but also increase students' sense of belonging. You are writing emails to students to provide advice about how to tackle their challenges"
+  context: |
+    You are given a current students' reflection called Student Reflection. The reflection prompts were 'What was your biggest challenge?' and 'What is a potential solution to your challenge?' You are also given former students' reflections. These reflections were automatically selected by our algorithm to have the most similar challenges to the student out of our dataset. However, the similarity may not be clear. Make sure the student actually talks about a challenge before using it in the email.
+  task: |
+    Please write an email between 100-250 words to the student that accomplishes the following tasks:
+    (1) First, summarize your understanding of the student's current challenge and validate their struggles.
+    (2) Assures the student that they are not alone with their challenge, and provide a general summary of previous students' challenges. 
+    (3) Identify the general topic the former students' reflections have in common, and identify how this topic relates
+    to the current student's challenge. Possible topics include: assignments, quizzes, lectures, quality of instructor, etc
+    (4) Provide a general summary of the previous students' solutions as well, and comment on the usefulness of the solutions.
+    (5) Provide your own solutions to the challenge based on your understanding of best practices in teaching.
+    (6) Please only include the email content (for example, no subject line, dear [name], or best regards)
+  example: |
+    "I want acknowledging the difficulty you're facing with else and if statements. Mastering the logic and syntax of programming constructs like these can be incredibly challenging, but it's also a crucial step in becoming proficient in coding. It's clear that you're dedicated to overcoming this obstacle, and I want to assure you that you're certainly not alone in finding aspects of programming, especially conditional statements, to be difficult. 
+
+    Many students before you have faced similar challenges, particularly with understanding if statements and their syntax. This commonality highlights a significant learning curve that many encounter when delving deeper into coding. The reflections from previous students reveal that challenges with conditional statements (like if and else statements) and other programming concepts are not uncommon. 
+
+    Here are some examples of other students demonstrating similar challenges:
+
+    1. I would say understanding the right syntax for if statements was my biggest challenge.
+    2. I think the biggest challenge was understanding the if statements.
+    3. I wouldn't say anything was exceedingly difficult for me. if I had to choose it would be if-else statements. 
+    4. My biggest challenge was learning about the variable data structures.
+
+    They've shared a variety of strategies to tackle these issues, from asking questions in class, reviewing prep work to understand the correct placement of if statements, to taking breaks and approaching the problem with fresh eyes.
+
+    While these suggestions are useful, I also I recommend practicing small code snippets with if and else statements to grasp their syntax and logic. Don't hesitate to seek help from peers, forums, or class for diverse perspectives. Explore online tutorials specifically focused on conditionals for fresh insights. Remember to take breaks when feeling stuck to refresh your thinking. Understand that learning takes time and effort—don't be discouraged by challenges. I'm here to support you; reach out for clarification or resources. With persistence and the right strategies, you'll succeed."
